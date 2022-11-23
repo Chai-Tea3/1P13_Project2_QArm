@@ -75,11 +75,11 @@ def pick_up(container_Size):
     if container_Size == "small":        
         arm.move_arm(0.589, 0.021, -0.014)   #Moves the arm to the pickup location
         time.sleep(2)
-        arm.control_gripper(35) #Closes the gripper
+        arm.control_gripper(35) #Closes the gripper for the small container
     elif container_Size == "large":
         arm.move_arm(0.617, 0.054, 0.044)  
         time.sleep(2)
-        arm.control_gripper(25)
+        arm.control_gripper(25) #Closes the gripper for the large container
     time.sleep(2)
     arm.move_arm(0.406, 0.0, 0.483)  #Moving the arm to the home position
 
@@ -93,12 +93,12 @@ def drop_off(autoclave_color,container_Size):
     arm.activate_autoclaves()
     time.sleep(2)
     if autoclave_color == "red":
-        while (True):
+        while (True): #Loops until the container has been dropped off in the correct
             pot_left = potentiometer.left() #Get the value of the left potentiometer
             if pot_left > 0.5 and pot_left < 1.0 and container_Size == "small": #If the left potentiometer is between 50 and 100%
                 arm.move_arm(red_position[0][0], red_position[0][1], red_position[0][2])   #Rotate shoulder and elbow to first position
                 time.sleep(2)
-                break
+                break #Exits the loop
                 
             elif pot_left == 1 and container_Size == "large": #If the left potentiometer is at 100%
                 arm.open_autoclave("red")
@@ -112,7 +112,7 @@ def drop_off(autoclave_color,container_Size):
         arm.control_gripper(-25) #Open gripper
         time.sleep(2)
         if container_Size == "large": #If the container is large, close the autoclave drawer
-            arm.open_autoclave("red",False)
+            arm.open_autoclave("red",False) #Closes the autoclave drawer
             time.sleep(2)
 
             
