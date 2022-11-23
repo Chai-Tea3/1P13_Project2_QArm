@@ -51,11 +51,11 @@ def rotate_Base(autoclave_color):
         cur_position = arm.effector_position() #Checks the current position of the autoclave
 
         #Uses a range to detect when the QArm is infront of the correct autoclave
-        if (cur_position[0] < autoclave_position[0]+0.01) and (cur_position[1] < autoclave_position[1]+0.01) and autoclave_color == "red": #Once the correct autoclave is detected, exits the loop.
+        if (cur_position[0] < autoclave_position[0]+0.01) and (cur_position[1] > autoclave_position[1]-0.01) and autoclave_color == "red": #Once the correct autoclave is detected, exits the loop.
             correct = True
         elif (cur_position[0] < autoclave_position[0]+0.01) and (cur_position[1] < autoclave_position[1]+0.01) and autoclave_color == "green": #Once the correct autoclave is detected, exits the loop.
             correct = True
-        elif (cur_position[0] < autoclave_position[0]+0.01) and (cur_position[1] > autoclave_position[1]+0.01) and autoclave_color == "blue": #Once the correct autoclave is detected, exits the loop.
+        elif (cur_position[0] < autoclave_position[0]+0.01) and (cur_position[1] > autoclave_position[1]-0.01) and autoclave_color == "blue": #Once the correct autoclave is detected, exits the loop.
             correct = True   
             
         elif pot_right > 0 and pot_right < 0.5:
@@ -73,9 +73,9 @@ def pick_up(container_Size):
         time.sleep(2)
         arm.control_gripper(40) #Closing the gripper
     elif container_Size == "large":
-        arm.move_arm(0.589, 0.021, -0.014)   #Moving the arm to the pickup location
+        arm.move_arm(0.617, 0.054, 0.044)   #Moving the arm to the pickup location
         time.sleep(2)
-        arm.control_gripper(23) #Closing the gripper
+        arm.control_gripper(25) #Closing the gripper
     time.sleep(2)
     arm.move_arm(0.406, 0.0, 0.483)  #Moving the arm to the home position
 
