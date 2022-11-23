@@ -86,7 +86,7 @@ def pick_up(container_Size):
 
 def drop_off(autoclave_color,container_Size):
     #Small, Large
-red_position = [[-0.614, 0.236, 0.286], [-0.434, 0.167, 0.148]]
+    red_position = [[-0.614, 0.236, 0.286], [-0.434, 0.167, 0.148]]
     green_position = [[0.0, -0.626, 0.272],[0.0, -0.409, 0.174]]
     blue_position = [[0.0, 0.627, 0.272], [0.0, 0.439, 0.135]]
     
