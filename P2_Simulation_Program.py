@@ -14,6 +14,7 @@ potentiometer = potentiometer_interface()
 #---------------------------------------------------------------------------------
 
 #Fri-27 Environment: 1
+#Riley Chai, chair3
 #Alexis Fernandez, fernaa62
 
 
@@ -71,7 +72,7 @@ def pick_up(container_Size):
     if container_Size == "small":        
         arm.move_arm(0.589, 0.021, -0.014)   #Moving the arm to the pickup location
         time.sleep(2)
-        arm.control_gripper(40) #Closing the gripper
+        arm.control_gripper(35) #Closing the gripper
     elif container_Size == "large":
         arm.move_arm(0.617, 0.054, 0.044)   #Moving the arm to the pickup location
         time.sleep(2)
@@ -105,7 +106,7 @@ def drop_off(autoclave_color,container_Size):
             else:
                 pass             
                 
-        arm.control_gripper(-35) #Open gripper
+        arm.control_gripper(-25) #Open gripper
         time.sleep(2)
         if container_Size == "large": #If the container is large, close the autoclave drawer
             arm.open_autoclave("red",False)
@@ -129,7 +130,7 @@ def drop_off(autoclave_color,container_Size):
             else:
                 pass             
                 
-        arm.control_gripper(-35) #Open gripper
+        arm.control_gripper(-25) #Open gripper
         time.sleep(2)
         if container_Size == "large": #If the container is large, close the autoclave drawer
             arm.open_autoclave("green",False)
@@ -153,7 +154,7 @@ def drop_off(autoclave_color,container_Size):
             else:
                 pass             
                 
-        arm.control_gripper(-35) #Open gripper
+        arm.control_gripper(-25) #Open gripper
         time.sleep(2)
         if container_Size == "large": #If the container is large, close the autoclave drawer
             arm.open_autoclave("blue",False)
@@ -169,3 +170,4 @@ def drop_off(autoclave_color,container_Size):
     
 
     
+
