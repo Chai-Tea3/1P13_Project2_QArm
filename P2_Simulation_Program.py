@@ -17,20 +17,37 @@ potentiometer = potentiometer_interface()
 #Riley Chai, chair3
 #Alexis Fernandez, fernaa62
 
+import random
 
 def main():
     #Order of container properties
+    container_id = [1,2,3,4,5,6]
     colors = ["red", "green", "blue","red", "green", "blue"]
     sizes = ["small","small","small", "large", "large", "large"]
 
     arm.home() #Reset the location of the QArm
     time.sleep(2)
+
+    random_list = random.sample(container_id,6) #Randomizes the spawning order
     
-    for i in range(1,7): #Loops through all 6 containers
-        arm.spawn_cage(i) #Spawn new container
-        pick_up(sizes[i-1]) #Execute pick up function
-        rotate_Base(colors[i-1]) #Use right potentiometer to rotate the base
-        drop_off(colors[i-1],sizes[i-1]) #Use left potentiometer to pick drop off location
+    for x in range(6): #Repeats for all 6 containers
+
+        #Check to ensure potentiometers are reset
+        if potentiometer.left() != 0.5 or potentiometer.right() != 0.5:
+            print("Please adjust both potentiometers to 50%")
+            
+            while(potentiometer.left() != 0.5 or potentiometer.right() != 0.5):
+                #Waits until both are set to 50%
+                pass
+        
+        cur_container = random_list[x]
+        arm.spawn_cage(cur_container) #Spawns a new container
+        
+        pick_up(sizes[cur_container-1]) #Executes the pick up function
+        rotate_Base(colors[cur_container-1]) #Uses right potentiometer to rotate the base
+        drop_off(colors[cur_container-1],sizes[cur_container-1]) #Use left potentiometer to determine drop off location
+    
+    print("Completed")
         
     
 
@@ -89,6 +106,11 @@ def drop_off(autoclave_color,container_Size):
     red_position = [[-0.614, 0.236, 0.286], [-0.434, 0.167, 0.148]]
     green_position = [[0.0, -0.644, 0.255],[0.0, -0.409, 0.174]]
     blue_position = [[0.0, 0.627, 0.272], [0.0, 0.439, 0.135]]
+
+    if container_Size == "large":
+        print("Please adjust the left potentiometer to 100%")
+    else:
+        print("Please adjust the left potentiometer above 50%")
     
     arm.activate_autoclaves()
     time.sleep(2)
@@ -166,6 +188,7 @@ def drop_off(autoclave_color,container_Size):
     arm.deactivate_autoclaves()
     arm.home()
     
+main()
 #---------------------------------------------------------------------------------
 # STUDENT CODE ENDS
 #---------------------------------------------------------------------------------
