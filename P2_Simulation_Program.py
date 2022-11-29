@@ -57,7 +57,8 @@ Stops rotating when the QArm is infront of the specified autoclave color.
 """
 def rotate_Base(autoclave_color):
     pot_right = potentiometer.right() #Stores the value of the right potentiometer in a variable
-
+    pot_initial = pot_right #Sets the initial reference point
+    
     #The exact position of each autoclave
     if autoclave_color == "red":
         autoclave_position = [-0.377, 0.152, 0.483]
@@ -70,20 +71,31 @@ def rotate_Base(autoclave_color):
     while(correct == False): #Loops until the QArm is infront of the correct autoclave
         pot_right = potentiometer.right()
         cur_position = arm.effector_position() #Checks the current position of the autoclave
-
+ 
         #Uses a range to detect when the QArm is infront of the correct autoclave
         if (cur_position[0] < autoclave_position[0]+0.01) and (cur_position[1] > autoclave_position[1]-0.01) and autoclave_color == "red": #Once the correct autoclave is detected, exits the loop.
             correct = True
         elif (cur_position[0] < autoclave_position[0]+0.01) and (cur_position[1] < autoclave_position[1]+0.01) and autoclave_color == "green": #Once the correct autoclave is detected, exits the loop.
             correct = True
         elif (cur_position[0] < autoclave_position[0]+0.01) and (cur_position[1] > autoclave_position[1]-0.01) and autoclave_color == "blue": #Once the correct autoclave is detected, exits the loop.
-            correct = True   
-            
-        elif pot_right > 0 and pot_right < 0.5: #Rotate the base counter-clockwise when the right potentiometer is between 0 and 50%
-            arm.rotate_base(-1)
-            
-        elif pot_right > 0.5: #Rotate the base clockwise when the right potentiometer is between 50 and 100%
-            arm.rotate_base(1) 
+            correct = True
+
+        #Rotates the base according to the current potentiometer value (Ex: 25% is 90 degrees right from the starting position)
+        elif pot_right != pot_initial: #Detects when the potentiometer is changed
+            pot_final = pot_right   #Sets the endpoint to the current reading
+
+            if pot_right > 0.95 or pot_right < 0.05:
+                rotate_percent = (pot_final - pot_initial)*260     #Determines the degrees that the base must rotate by taking the difference between
+                                                                   #the final and initial readings and multiplying by 360
+                                                                   #If the potentiometer is less that 5% or above 95% multiply by 260 instead to prevent the QArm from
+                                                                   #Rotating past the maximum range.
+            else:
+                rotate_percent = (pot_final - pot_initial)*360
+                
+            arm.rotate_base(rotate_percent)
+            pot_initial = pot_final  #Resets the reference point
+
+
 
 """
 Executes commands to pick up the container based on its size.
@@ -96,7 +108,7 @@ def pick_up(container_Size):
     elif container_Size == "large":
         arm.move_arm(0.617, 0.054, 0.044)  
         time.sleep(2)
-        arm.control_gripper(25) #Closes the gripper for the large container
+        arm.control_gripper(27) #Closes the gripper for the large container
     time.sleep(2)
     arm.move_arm(0.406, 0.0, 0.483)  #Moving the arm to the home position
 
@@ -179,7 +191,7 @@ def drop_off(autoclave_color,container_Size):
             else:
                 pass             
                 
-        arm.control_gripper(-25) #Open gripper
+        arm.control_gripper(-27) #Open gripper
         time.sleep(2)
         if container_Size == "large": #If the container is large, close the autoclave drawer
             arm.open_autoclave("blue",False)
